@@ -1,6 +1,6 @@
 /*
   msToString.h - A function to convert a number of milliseconds into a time
-  string of the form HH(.##) or HH:MM(.##) or HH:MM:SS(.##) in a buffer.
+  string of the form (HH)(:MM)(:SS)(.##) in a buffer.
   Created by Ted Toal, July 19, 2023.
   Released into the public domain.
 

@@ -1,6 +1,6 @@
 /*
-  msToString.h - A function to convert a number of milliseconds into a time
-  string of the form HH(.##) or HH:MM(.##) or HH:MM:SS(.##) in a buffer.
+  msToString.cpp - A function to convert a number of milliseconds into a time
+  string of the form (HH)(:MM)(:SS)(.##) in a buffer.
   Created by Ted Toal, July 19, 2023.
   Released into the public domain.
 
@@ -36,8 +36,7 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <msToString.h>
-#include <monitor_printf.h>
-
+#
 char* msToString(uint32_t MS, char* S, size_t n, bool hours, bool minutes,
   bool seconds, int maxDigitsFN, int digitsAfterDP, bool* exceededMax) {
 
