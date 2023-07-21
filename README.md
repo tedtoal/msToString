@@ -59,11 +59,11 @@ The arguments are:
 
 > **numDigitsFN:** number of digits to show for the first number (whether it be hours, minutes, or seconds), default is 0. If 0, there is no limit on the number of digits to show. Otherwise, if the value of MS gives a first number with more digits than this, the entire result is shown with "X"'s instead of digits, to indicate overflow of result. Or, if MS gives a value with fewer digits than this, leading 0's are included to fill out the length of the first number to equal this. For example, if numDigitsFN is 3 and the first number is "4", it will be filled out with two leading zeroes to give "004" with 3 digits total.
 
-> **digitsAfterDP:** number of digits to show after a decimal point at the end of the string, default is 0. If 0, no decimal point and additional digits are shown. Otherwise, whatever number of milliseconds remain beyond what is shown by the hours, minutes, and/or seconds shown are displayed as a fraction of the last number shown. For example, if digitsAfterDP is 2 and hours and minutes are shown but seconds are not, then if 6000 milliseconds are left over after computing the hours and minutes numbers, then ".10" would appear after the "HH:MM" numbers, for example "2:45.10".
+> **digitsAfterDP:** number of digits to show after a decimal point at the end of the string, default is 0. If 0, no decimal point and fractional digits are shown. Otherwise, whatever number of milliseconds remain beyond what is shown by the hours, minutes, and/or seconds shown are displayed as a fraction of the last number shown. For example, if digitsAfterDP is 2 and hours and minutes are shown but seconds are not, then if 6000 milliseconds are left over after computing the hours and minutes numbers, then ".10" would appear after the "HH:MM" numbers, for example "2:45.10", since 6000 milliseconds is one-tenth of a minute.
 
 > **exceededMax:** is normally NULL, which is its default value. If not NULL, it is a pointer to a bool variable, and on return from this function that variable is set *false* if the first number did not exceed the limit of digits given by numDigitsFN, or *true* if it did exceed that. If numDigitsFN=0 the variable will always be *false*.
 
-The function returns the value of `S`, which allows a call to the function to be used as an argument to a function, such as for a printf %s-specifier's value as in the example where monitor.printf() uses a "%s" specifier and its value is then provided by calling msToString().
+The function returns the value of `S`, which allows a call to the function to be used as an argument to a function, such as for a printf %s-specifier's value, as in the example where monitor.printf() uses a "%s" specifier and its value is then provided by calling msToString().
 
 ## Example of HH:MM or MM:SS
 
@@ -101,7 +101,7 @@ Setting numDigitsFN to a number other than 0 also has the effect of forcing digi
 
 ## Including a decimal fraction in the result
 
-Sometimes you may want to have a resulting string that includes a decimal point and fractional value. This is done by setting *digitsAfterDP* to the number of digits desired after the decimal point. The interpretation of the fraction as fractional hours, fractional minutes, or fractional seconds depends on what the last number before the decimal point is. For example:
+Sometimes you may want to have a result string that includes a decimal point and fractional value. This is done by setting *digitsAfterDP* to the number of digits desired after the decimal point. The interpretation of the fraction as fractional hours, fractional minutes, or fractional seconds depends on what the last number before the decimal point is. For example:
 
 ```
   monitor.printf("Elapsed time in HH:MM.MMM is %s\n", msToString(MS, S, n, true, true, false, 2, 3));
