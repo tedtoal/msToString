@@ -39,29 +39,29 @@ The `msToString()` function has this declaration:
 
 ```
 char* msToString(uint32_t MS, char* S, size_t n, bool hours=true,
-  bool minutes=true, bool seconds=true, int maxDigitsFN=0, int digitsAfterDP=0,
+  bool minutes=true, bool seconds=true, int numDigitsFN=0, int digitsAfterDP=0,
   bool* exceededMax=NULL);
 ```
 
 The arguments are:
 
-**MS:** the long integer (uint32_t type) value that is the number of milliseconds to convert to a string.
+> **MS:** the long integer (uint32_t type) value that is the number of milliseconds to convert to a string.
 
-**S:** a character buffer in which to place the result, must be at least as long as the longest expected result.
+> **S:** a character buffer in which to place the result, must be at least as long as the longest expected result.
 
-**n:** sizeof(S), the number of characters in the character buffer S.
+> **n:** sizeof(S), the number of characters in the character buffer S. Result is truncated beyond this.
 
-**hours:** true to show hours in the result, false to omit hours, default is true.
+> **hours:** true to show hours in the result, false to omit hours, default is true.
 
-**minutes:** true to show minutes in the result, false to omit minutes, default is true.
+> **minutes:** true to show minutes in the result, false to omit minutes, default is true.
 
-**seconds:** true to show seconds in the result, false to omit seconds, default is true.
+> **seconds:** true to show seconds in the result, false to omit seconds, default is true.
 
-**maxDigitsFN:** maximum number of digits to ever show for the first number (whether it be hours, minutes, or seconds), default is 0. If 0, there is no limit on the number of digits to show. Otherwise, if the value of MS gives a first number with more digits than this, the entire result is shown with "X"'s instead of digits, to indicate overflow of result. This also determines whether leading 0's appear in the first number of the result. If this is 0, there are no leading 0's. Otherwise, leading 0's are included to fill out the length of the first number to equal maxDigitsFN. For example, if maxDigitsFN is 3 and the first number is "4", it will be filled out with two leading zeroes to give "004" with 3 digits total.
+> **numDigitsFN:** number of digits to show for the first number (whether it be hours, minutes, or seconds), default is 0. If 0, there is no limit on the number of digits to show. Otherwise, if the value of MS gives a first number with more digits than this, the entire result is shown with "X"'s instead of digits, to indicate overflow of result. Or, if MS gives a value with fewer digits than this, leading 0's are included to fill out the length of the first number to equal this. For example, if numDigitsFN is 3 and the first number is "4", it will be filled out with two leading zeroes to give "004" with 3 digits total.
 
-**digitsAfterDP:** number of digits to show after a decimal point at the end of the string, default is 0. If 0, no decimal point and additional digits are shown. Otherwise, whatever number of milliseconds remain beyond what is shown by the hours, minutes, and/or seconds shown are displayed as a fraction of the last number shown. For example, if digitsAfterDP is 2 and hours and minutes are shown but seconds are not, then if 6000 milliseconds are left over after computing the hours and minutes numbers, then ".10" would appear after the "HH:MM" numbers, for example "2:45.10".
+> **digitsAfterDP:** number of digits to show after a decimal point at the end of the string, default is 0. If 0, no decimal point and additional digits are shown. Otherwise, whatever number of milliseconds remain beyond what is shown by the hours, minutes, and/or seconds shown are displayed as a fraction of the last number shown. For example, if digitsAfterDP is 2 and hours and minutes are shown but seconds are not, then if 6000 milliseconds are left over after computing the hours and minutes numbers, then ".10" would appear after the "HH:MM" numbers, for example "2:45.10".
 
-**exceededMax:** is normally NULL, which is its default value. If not NULL, it is a pointer to a bool variable, and on return from this function that variable is set *false* if the first number did not exceed the limit of digits given by maxDigitsFN, or *true* if it did exceed that. If maxDigitsFN=0 the variable will always be *false*.
+> **exceededMax:** is normally NULL, which is its default value. If not NULL, it is a pointer to a bool variable, and on return from this function that variable is set *false* if the first number did not exceed the limit of digits given by numDigitsFN, or *true* if it did exceed that. If numDigitsFN=0 the variable will always be *false*.
 
 The function returns the value of `S`, which allows a call to the function to be used as an argument to a function, such as for a printf %s-specifier's value as in the example where monitor.printf() uses a "%s" specifier and its value is then provided by calling msToString().
 
@@ -89,15 +89,15 @@ You can also set just one of *hours*, *minutes*, and *seconds* true and the othe
 
 ## Example where first number is a fixed length
 
-Often you want to force the first number of the result to be a fixed length, usually 2 characters, since clock time is usually shown using two digits. This is done by setting *maxDigitsFN* to the number of digits desired for the first number. For example:
+Often you want to force the first number of the result to be a fixed length, usually 2 characters, since clock time is usually shown using two digits. This is done by setting *numDigitsFN* to the number of digits desired for the first number. For example:
 
 ```
   monitor.printf("Elapsed time in HH:MM:SS is %s\n", msToString(MS, S, n, true, true, true, 2));
 ```
 
-If the first number has fewer digits, leading 0's are inserted to make it have exactly *maxDigitsFN* digits. For example, if MS equated to "1:45" in the previous example, it would instead print "01:45".
+If the first number has fewer digits, leading 0's are inserted to make it have exactly *numDigitsFN* digits. For example, if MS equated to "1:45" in the previous example, it would instead print "01:45".
 
-Setting maxDigitsFN to a number other than 0 also has the effect of forcing digits to be replaced with X's when the first number has *more than maxDigitsFN digits*. For example, if MS equated to "187:45" in the previous example, it would instead print "XX:XX".
+Setting numDigitsFN to a number other than 0 also has the effect of forcing digits to be replaced with X's when the first number has *more than numDigitsFN digits*. For example, if MS equated to "187:45" in the previous example, it would instead print "XX:XX".
 
 ## Including a decimal fraction in the result
 
@@ -115,7 +115,7 @@ The decimal point character, ".", is currently fixed, it cannot be changed to a 
 
 # Using false for hours, minutes, and seconds
 
-You can also set all three of *hours*, *minutes*, and *seconds* to false. This causes conversion of MS to an integer string, ignoring *digitsAfterDP* but honoring *maxDigitsFN* (which can be used to insert leading 0's to pad the result to a specific length and replace digits with 'X's if there are more than that many digits). It is not expected that the user will use this, but you could. It is used internally by msToString() in recursive calls to itself to convert each of the hours, minutes, and seconds values.
+You can also set all three of *hours*, *minutes*, and *seconds* to false. This causes conversion of MS to an integer string, ignoring *digitsAfterDP* but honoring *numDigitsFN* (which can be used to insert leading 0's to pad the result to a specific length and replace digits with 'X's if there are more than that many digits). It is not expected that the user will use this, but you could. It is used internally by msToString() in recursive calls to itself to convert each of the hours, minutes, and seconds values.
 
 ## Contact
 
