@@ -1,6 +1,6 @@
 # msToString
 
-## Library for converting a number of milliseconds into a time string of the form (HH)(:MM)(:SS)(.##)
+## Library for converting a number of milliseconds into a time string such as "HH:MM:SS"
 
 This library provides a C code function named msToString() that converts a long integer (uint32_t type) value that represents a number of milliseconds into a string that takes one of the forms "HH", "HH:MM", "HH:MM:SS", "MM", "MM:SS", "SS", or any of those followed by a decimal point and fractional digits. The string could be printed to a device such as the serial monitor port or a display, for example.
 
