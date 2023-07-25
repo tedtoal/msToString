@@ -46,21 +46,21 @@ char* msToString(uint32_t MS, char* S, size_t n, bool hours=true,
 The arguments are:
 
 > **MS:** the long integer (uint32_t type) value that is the number of milliseconds to convert to a string.
-
+>
 > **S:** a character buffer in which to place the result, must be at least as long as the longest expected result.
-
+>
 > **n:** sizeof(S), the number of characters in the character buffer S. Result is truncated beyond this.
-
+>
 > **hours:** true to show hours in the result, false to omit hours, default is true.
-
+>
 > **minutes:** true to show minutes in the result, false to omit minutes, default is true.
-
+>
 > **seconds:** true to show seconds in the result, false to omit seconds, default is true.
-
+>
 > **numDigits:** >0 to use leading zeroes in the first number to make it have that many digits, 0 for no limit on the number of digits in it. The other two numbers always use leading zeroes so they have 2 digits, since they must be minutes or seconds and range from 0 to 59. The first number can be either hours, minutes, or seconds depending on the preceding arguments. The default for numDigits is 0. If >0 and the value of MS gives a first number with more digits, the entire result is shown with "X"'s instead of digits, to indicate overflow of result. For example, if all three numbers are shown and numDigits is 2, then if MS is less than 100 hours, the output string will be of the form ##:##:## with leading zeroes used when necessary to make 2 digits. However, if MS is >= 100 hours, then the output string will be "XX:XX:XX", with X's used to indicate overflow beyond the desired 2 digits.
-
+>
 > **digitsAfterDP:** number of digits to show after a decimal point at the end of the string, default is 0. If 0, no decimal point and fractional digits are shown. Otherwise, whatever number of milliseconds remain beyond what is shown by the hours, minutes, and/or seconds shown are displayed as a fraction of the last number shown. For example, if digitsAfterDP is 2 and hours and minutes are shown but seconds are not, then if 6000 milliseconds are left over after computing the hours and minutes numbers, then ".10" would appear after the "HH:MM" numbers, for example "2:45.10", since 6000 milliseconds is one-tenth of a minute.
-
+>
 > **exceededMax:** is normally NULL, which is its default value. If not NULL, it is a pointer to a bool variable, and on return from this function that variable is set *false* if the first number did not exceed the limit of digits given by numDigits, or *true* if it did exceed that. If numDigits=0 the variable will always be *false*.
 
 The function returns the value of `S`, which allows a call to the function to be used as an argument to a function, such as for a printf %s-specifier's value, as in the example where monitor.printf() uses a "%s" specifier and its value is then provided by calling msToString().
