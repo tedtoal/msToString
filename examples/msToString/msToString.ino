@@ -84,8 +84,8 @@ void setup() {
   monitor.printf("HH:(MM):SS\n");
   monitor.printf("Expect 12:34:56       %s\n", msToString(12*3600000UL+34*60000UL+56*1000UL, S, n, true, false, true));
   monitor.printf("Expect 123:45:32      %s\n", msToString(123*3600000UL+45*60000UL+32*1000UL, S, n, true, false, true));
-  monitor.printf("Expect 1:23:45        %s\n", msToString(1*3600000UL+23*60000UL+45*1000UL, S, n, true, false, true));
-  monitor.printf("Expect 01:23:45       %s\n", msToString(1*3600000UL+23*60000UL+45*1000UL, S, n, true, false, true, 2));
+  monitor.printf("Expect 1:02:03        %s\n", msToString(1*3600000UL+2*60000UL+3*1000UL, S, n, true, false, true));
+  monitor.printf("Expect 01:02:03       %s\n", msToString(1*3600000UL+2*60000UL+3*1000UL, S, n, true, false, true, 2));
   monitor.printf("Expect X:XX:XX        %s\n", msToString(12*3600000UL+34*60000UL+56*1000UL, S, n, true, false, true, 1));
   monitor.printf("Expect XX:XX:XX       %s\n", msToString(123*3600000UL+45*60000UL+32*1000UL, S, n, true, false, true, 2));
   monitor.printf("Expect 123:45:32.678  %s\n", msToString(123*3600000UL+45*60000UL+32*1000UL+678UL, S, n, true, false, true, 0, 3));
@@ -93,8 +93,8 @@ void setup() {
   monitor.printf("HH:MM:SS\n");
   monitor.printf("Expect 12:34:56       %s\n", msToString(12*3600000UL+34*60000UL+56*1000UL, S, n, true, true, true));
   monitor.printf("Expect 123:45:32      %s\n", msToString(123*3600000UL+45*60000UL+32*1000UL, S, n, true, true, true));
-  monitor.printf("Expect 1:23:45        %s\n", msToString(1*3600000UL+23*60000UL+45*1000UL, S, n, true, true, true));
-  monitor.printf("Expect 01:23:45       %s\n", msToString(1*3600000UL+23*60000UL+45*1000UL, S, n, true, true, true, 2));
+  monitor.printf("Expect 1:02:03        %s\n", msToString(1*3600000UL+2*60000UL+3*1000UL, S, n, true, true, true));
+  monitor.printf("Expect 01:02:03       %s\n", msToString(1*3600000UL+2*60000UL+3*1000UL, S, n, true, true, true, 2));
   monitor.printf("Expect X:XX:XX        %s\n", msToString(12*3600000UL+34*60000UL+56*1000UL, S, n, true, true, true, 1));
   monitor.printf("Expect XX:XX:XX       %s\n", msToString(123*3600000UL+45*60000UL+32*1000UL, S, n, true, true, true, 2));
   monitor.printf("Expect 123:45:32.678  %s\n", msToString(123*3600000UL+45*60000UL+32*1000UL+678UL, S, n, true, true, true, 0, 3));
