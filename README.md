@@ -39,7 +39,7 @@ The `msToString()` function has this declaration:
 
 ```
 char* msToString(uint32_t MS, char* S, size_t n, bool hours=true,
-  bool minutes=true, bool seconds=true, int numDigitsFN=0, int digitsAfterDP=0,
+  bool minutes=true, bool seconds=true, int numDigits=0, int digitsAfterDP=0,
   bool* exceededMax=NULL);
 ```
 
@@ -57,11 +57,11 @@ The arguments are:
 
 > **seconds:** true to show seconds in the result, false to omit seconds, default is true.
 
-> **numDigitsFN:** number of digits to show for the first number (whether it be hours, minutes, or seconds), default is 0. If 0, there is no limit on the number of digits to show. Otherwise, if the value of MS gives a first number with more digits than this, the entire result is shown with "X"'s instead of digits, to indicate overflow of result. Or, if MS gives a value with fewer digits than this, leading 0's are included to fill out the length of the first number to equal this. For example, if numDigitsFN is 3 and the first number is "4", it will be filled out with two leading zeroes to give "004" with 3 digits total.
+> **numDigits:** 0 to not used leading zeroes in the first number, >0 to use leading zeroes in the first number to make it have that many digits, 0 for no limit on the number of digits in the first number. The other two numbers always use leading zeroes to so they have 2 digits, since they must be minutes or seconds and range from 0 to 59. The first number can be either hours, minutes, or seconds depending on the preceding arguments. The default for this is 0. If >0 and the value of MS gives a first number with more digits, the entire result is shown with "X"'s instead of digits, to indicate overflow of result. For example, if all three numbers are shown and numDigits is 2, then if MS is less than 100 hours, the output string will be of the form ##:##:## with leading zeroes used when necessary to make 2 digits. However, if MS is >= 100 hours, then the output string will be "XX:XX:XX", with X's used to indicate overflow beyond the desired 2 digits.
 
 > **digitsAfterDP:** number of digits to show after a decimal point at the end of the string, default is 0. If 0, no decimal point and fractional digits are shown. Otherwise, whatever number of milliseconds remain beyond what is shown by the hours, minutes, and/or seconds shown are displayed as a fraction of the last number shown. For example, if digitsAfterDP is 2 and hours and minutes are shown but seconds are not, then if 6000 milliseconds are left over after computing the hours and minutes numbers, then ".10" would appear after the "HH:MM" numbers, for example "2:45.10", since 6000 milliseconds is one-tenth of a minute.
 
-> **exceededMax:** is normally NULL, which is its default value. If not NULL, it is a pointer to a bool variable, and on return from this function that variable is set *false* if the first number did not exceed the limit of digits given by numDigitsFN, or *true* if it did exceed that. If numDigitsFN=0 the variable will always be *false*.
+> **exceededMax:** is normally NULL, which is its default value. If not NULL, it is a pointer to a bool variable, and on return from this function that variable is set *false* if the first number did not exceed the limit of digits given by numDigits, or *true* if it did exceed that. If numDigits=0 the variable will always be *false*.
 
 The function returns the value of `S`, which allows a call to the function to be used as an argument to a function, such as for a printf %s-specifier's value, as in the example where monitor.printf() uses a "%s" specifier and its value is then provided by calling msToString().
 
@@ -89,15 +89,15 @@ You can also set just one of *hours*, *minutes*, and *seconds* true and the othe
 
 ## Example where first number is a fixed length
 
-Often you want to force the first number of the result to be a fixed length, usually 2 characters, since clock time is usually shown using two digits. This is done by setting *numDigitsFN* to the number of digits desired for the first number. For example:
+Often you want to force the first number of the result to be a fixed length, usually 2 characters, since clock time is usually shown using two digits. This is done by setting *numDigits* to the number of digits desired for the first number. For example:
 
 ```
   monitor.printf("Elapsed time in HH:MM:SS is %s\n", msToString(MS, S, n, true, true, true, 2));
 ```
 
-If the first number has fewer digits, leading 0's are inserted to make it have exactly *numDigitsFN* digits. For example, if MS equated to "1:45" in the previous example, it would instead print "01:45".
+If the first number has fewer digits, leading 0's are inserted to make it have exactly *numDigits* digits. For example, if MS equated to "1:45" in the previous example, it would instead print "01:45".
 
-Setting numDigitsFN to a number other than 0 also has the effect of forcing digits to be replaced with X's when the first number has *more than numDigitsFN digits*. For example, if MS equated to "187:45" in the previous example, it would instead print "XX:XX".
+Setting numDigits to a number other than 0 also has the effect of forcing digits to be replaced with X's when the first number has *more than numDigits digits*. For example, if MS equated to "187:45" in the previous example, it would instead print "XX:XX".
 
 ## Including a decimal fraction in the result
 
@@ -115,7 +115,7 @@ The decimal point character, ".", is currently fixed, it cannot be changed to a 
 
 # Using false for hours, minutes, and seconds
 
-You can also set all three of *hours*, *minutes*, and *seconds* to false. This causes conversion of MS to an integer string, ignoring *digitsAfterDP* but honoring *numDigitsFN* (which can be used to insert leading 0's to pad the result to a specific length and replace digits with 'X's if there are more than that many digits). It is not expected that the user will use this, but you could. It is used internally by msToString() in recursive calls to itself to convert each of the hours, minutes, and seconds values.
+You can also set all three of *hours*, *minutes*, and *seconds* to false. This causes conversion of MS to an integer string, ignoring *digitsAfterDP* but honoring *numDigits* (which can be used to insert leading 0's to pad the result to a specific length and replace digits with 'X's if there are more than that many digits). It is not expected that the user will use this, but you could. It is used internally by msToString() in recursive calls to itself to convert each of the hours, minutes, and seconds values.
 
 ## Contact
 

@@ -38,7 +38,7 @@
 #include <msToString.h>
 #
 char* msToString(uint32_t MS, char* S, size_t n, bool hours, bool minutes,
-  bool seconds, int numDigitsFN, int digitsAfterDP, bool* exceededMax) {
+  bool seconds, int numDigits, int digitsAfterDP, bool* exceededMax) {
 
   bool _exceededMax = false;
   size_t len;
@@ -46,27 +46,27 @@ char* msToString(uint32_t MS, char* S, size_t n, bool hours, bool minutes,
   uint32_t div = 0;
 
   // hours=minutes=seconds=false
-  // Plain conversion of MS to an integer string, honoring numDigitsFN.
+  // Plain conversion of MS to an integer string, honoring numDigits.
   if (!hours && !minutes && !seconds) {
-    if (numDigitsFN == 0)
+    if (numDigits == 0)
       snprintf(p, n, "%02ld", MS);
     else {
       int Ndigits = 1;
       for (uint32_t V = 10; MS >= V && V != 1000000000; V *= 10)
-        if (++Ndigits > numDigitsFN) {
+        if (++Ndigits > numDigits) {
           _exceededMax = true;
           break;
         }
       }
       if (!_exceededMax) {
         char fmt[8];
-        sprintf(fmt, "%%0%dld", numDigitsFN); // e.g. "%02ld"
+        sprintf(fmt, "%%0%dld", numDigits); // e.g. "%02ld"
         snprintf(p, n, fmt, MS);
       } else {
-        while (numDigitsFN > 0 && n > 0) {
+        while (numDigits > 0 && n > 0) {
           *p++ = 'X';
           n--;
-          numDigitsFN--;
+          numDigits--;
         }
         *p = 0;
     }
@@ -78,9 +78,9 @@ char* msToString(uint32_t MS, char* S, size_t n, bool hours, bool minutes,
     uint16_t hours = (uint16_t) (MS / div);
     MS %= div;
     // Use recursive call with hours=minutes=seconds=false to convert hours to
-    // a string, honoring numDigitsFN.
-    msToString(hours, p, n, false, false, false, numDigitsFN, 0, &_exceededMax);
-    numDigitsFN = 0;
+    // a string, honoring numDigits.
+    msToString(hours, p, n, false, false, false, numDigits, 0, &_exceededMax);
+    numDigits = 2;
     len = strlen(p);
     p = p + len;
     n -= len;
@@ -100,8 +100,8 @@ char* msToString(uint32_t MS, char* S, size_t n, bool hours, bool minutes,
       div = 60000U; // That many milliseconds in a minute.
       uint32_t minutes = MS / div;
       MS %= div;
-      msToString(minutes, p, n, false, false, false, numDigitsFN, 0, &_exceededMax);
-      numDigitsFN = 0;
+      msToString(minutes, p, n, false, false, false, numDigits, 0, &_exceededMax);
+      numDigits = 2;
     }
     len = strlen(p);
     p = p + len;
@@ -122,8 +122,8 @@ char* msToString(uint32_t MS, char* S, size_t n, bool hours, bool minutes,
       div = 1000U; // That many milliseconds in a second.
       uint32_t seconds = MS / div;
       MS %= div;
-      msToString(seconds, p, n, false, false, false, numDigitsFN, 0, &_exceededMax);
-      numDigitsFN = 0;
+      msToString(seconds, p, n, false, false, false, numDigits, 0, &_exceededMax);
+      numDigits = 2;
     }
     len = strlen(p);
     p = p + len;

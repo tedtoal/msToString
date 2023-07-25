@@ -47,25 +47,36 @@
   @param    minutes   true to include minutes in string, false for not. Ignored
                       and taken as true if 'hours' and 'minutes' are both true.
   @param    seconds   true to include seconds in string, false for not.
-  @param    numDigitsFN     Number of digits in the first number, or 0 to allow
-                            it to have any number of digits. For example, if
-                            hours=true and numDigitsFN=2, then if MS is more
-                            than 99 hours, XX hours is shown and the other
-                            values if any are also X's. If on the other hand MS
-                            is fewer than 10 hours, a leading '0' digit is added
-                            so the result will have exactly 2 digits.
+  @param    numDigits Determines whether LEADING ZEROES are used for the first
+                      number (hours, minutes, or seconds depending on previous
+                      arguments) and the other numbers (minutes and/or seconds).
+                      Possible values:
+                        > 0: the first number has numDigits digits and the
+                             others have 2 digits. E.g. 2 means all numbers have
+                             exactly 2 digits, while 3 means the first number
+                             has 3 digits and the others have 2 digits.
+                        0:   leading zeroes are only used for numbers after the
+                             first. The first number has any number of digits,
+                             while the others have exactly 2 digits since they
+                             range from 0 to 59.
+                      For example, if all three numbers are shown and numDigits
+                      is 2, then if MS is less than 100 hours, the output string
+                      will be of the form ##:##:## with leading zeroes used when
+                      necessary to make 2 digits. However, if MS is >= 100 hours
+                      then the output string will be "XX:XX:XX", with X's used
+                      to indicate overflow beyond the desired 2 digits.
   @param    digitsAfterDP   Number of digits to include after a decimal point
                             following the last number. If 0, no decimal point is
                             included. The final digit is NOT ROUNDED.
   @param    exceededMax     If not NULL, *exceededMax is set true if the number
-                            of digits in the first number exceeded numDigitsFN,
-                            or is set false if not (or if numDigitsFN=0).
+                            of digits in the first number exceeded numDigits,
+                            or is set false if not (or if numDigits=0).
   @returns                  S.
   @note     If the resulting string is longer than n-1 characters, the remaining
             characters are discarded and not stored in S.
   @note     If all of 'hours', 'minutes', 'seconds' are false, MS is converted
             into string representing number of milliseconds, and digitsAfterDP
-            is ignored. numDigitsFN is still honored. Thus 'milliseconds' is
+            is ignored. numDigits is still honored. Thus 'milliseconds' is
             irrelevant, MS is simply an integer to be converted to a string.
   @note     The colon character, ":", is used to separate hours from minutes
             from seconds and is currently fixed, it cannot be changed to a
@@ -75,7 +86,7 @@
 */
 /**************************************************************************/
 extern char* msToString(uint32_t MS, char* S, size_t n, bool hours=true,
-  bool minutes=true, bool seconds=true, int numDigitsFN=0, int digitsAfterDP=0,
+  bool minutes=true, bool seconds=true, int numDigits=0, int digitsAfterDP=0,
   bool* exceededMax=NULL);
 
 #endif // msToString_h
