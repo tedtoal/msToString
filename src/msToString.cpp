@@ -150,7 +150,7 @@ char* msToString(uint32_t MS, char* S, size_t n, bool hours, bool minutes,
     }
   }
 
-  if (exceededMax != NULL)
+  if (exceededMax != nullptr)
     *exceededMax = _exceededMax;
   return(S);
 }

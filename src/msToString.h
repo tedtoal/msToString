@@ -68,9 +68,10 @@
   @param    digitsAfterDP   Number of digits to include after a decimal point
                             following the last number. If 0, no decimal point is
                             included. The final digit is NOT ROUNDED.
-  @param    exceededMax     If not NULL, *exceededMax is set true if the number
-                            of digits in the first number exceeded numDigits,
-                            or is set false if not (or if numDigits=0).
+  @param    exceededMax     If not nullptr, *exceededMax is set true if the
+                            number of digits in the first number exceeded
+                            numDigits, or is set false if not (or if
+                            numDigits=0).
   @returns                  S.
   @note     If the resulting string is longer than n-1 characters, the remaining
             characters are discarded and not stored in S.
@@ -87,6 +88,6 @@
 /**************************************************************************/
 extern char* msToString(uint32_t MS, char* S, size_t n, bool hours=true,
   bool minutes=true, bool seconds=true, int numDigits=0, int digitsAfterDP=0,
-  bool* exceededMax=NULL);
+  bool* exceededMax=nullptr);
 
 #endif // msToString_h

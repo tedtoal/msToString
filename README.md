@@ -40,7 +40,7 @@ The `msToString()` function has this declaration:
 ```
 char* msToString(uint32_t MS, char* S, size_t n, bool hours=true,
   bool minutes=true, bool seconds=true, int numDigits=0, int digitsAfterDP=0,
-  bool* exceededMax=NULL);
+  bool* exceededMax=nullptr);
 ```
 
 The arguments are:
@@ -61,7 +61,7 @@ The arguments are:
 >
 > **digitsAfterDP:** number of digits to show after a decimal point at the end of the string, default is 0. If 0, no decimal point and fractional digits are shown. Otherwise, whatever number of milliseconds remain beyond what is shown by the hours, minutes, and/or seconds shown are displayed as a fraction of the last number shown. For example, if digitsAfterDP is 2 and hours and minutes are shown but seconds are not, then if 6000 milliseconds are left over after computing the hours and minutes numbers, then ".10" would appear after the "HH:MM" numbers, for example "2:45.10", since 6000 milliseconds is one-tenth of a minute.
 >
-> **exceededMax:** is normally NULL, which is its default value. If not NULL, it is a pointer to a bool variable, and on return from this function that variable is set *false* if the first number did not exceed the limit of digits given by numDigits, or *true* if it did exceed that. If numDigits=0 the variable will always be *false*.
+> **exceededMax:** is normally nullptr, which is its default value. If not nullptr, it is a pointer to a bool variable, and on return from this function that variable is set *false* if the first number did not exceed the limit of digits given by numDigits, or *true* if it did exceed that. If numDigits=0 the variable will always be *false*.
 
 The function returns the value of `S`, which allows a call to the function to be used as an argument to a function, such as for a printf %s-specifier's value, as in the example where monitor.printf() uses a "%s" specifier and its value is then provided by calling msToString().
 
